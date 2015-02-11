@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<head>
+        <title>Slideshow</title>
+	<meta charset="utf-8">
+<script type = "text/javascript">
+var myVariable;  
+var currentImage = 0;
+var startSlideshow = false;
+var currentSlide = false;
+var previousImage = 0;
+var numberOfImages = 10; 
+var delay = 1000;
+
+        var infoArchitect = ["Armory: Charles Aldrich", "Pillsbury Hall: Leroy Buffington with Harvey Ellis", "Folwell Hall: Clarence H. Johnston Sr.", "Jones Hall: Charles Aldrich", "Pillsbury Statue: Daniel C. French, sculptor", "Wesbrook Hall: Frederick Corser", "Nicholson Hall: LeRoy Buffington with Harvey Ellis", "Eddy Hall: LeRoy Buffington", "Music Education: Warren H. Hayes", "Wulling Hall: Allen Stem and Charles Reed"];
+
+   	var infoYear = [ "Armory: 1896", "Pillsbury Hall: 1889", "Folwell Hall: 1907", "Jones Hall: 1901", "Pillsbury Statue: 1900", "Wesbrook Hall: 1898", "Nicholson Hall: 1890", "Eddy Hall: 1886", "Music Education: 1888", "Wulling Hall: 1892" ];
+
+	var infoDescription = [ "Armory: Built for athletics and military drill, as well as performing arts and social activities. Memorial plaques at the front entrance honor students, faculty, and alumni who fought in the Spanish-American War.", "Pillsbury Hall: Built as Science Hall. Named for Governor John S. Pillsbury.","Folwell Hall: When Old Main burned in 1904, Folwell Hall was built to house displaced departments. Named for William Watts Folwell, first president of the University, 1869-84.", "Jones Hall: Built as Physics Building. Named for Frederick S. Jones, professor of physics and dean of the College of Engineering.","Pillsbury Statue: Pillsbury statue located across the street from Burton Hall.", "Wesbrook Hall: Built as Laboratory of Medical Science. In 1912, dentistry moved here. Named for Frank Wesbrook, professor of pathology and bacteriology and dean of the College of Medicine and Surgery.", "Nicholson Hall: Built as chemical laboratory. In 1914, chemistry moved to the mall area and Nicholson was remodeled for the men's union until Coffman Memorial Union was built as a coed student union. Named for Edward E. Nicholson, professor of chemistry and later dean of Student Affairs.", "Eddy Hall: Built as Mechanic Arts. It is the oldest existing building on campus. Named for Henry Turner Eddy, professor of engineering and mathematics and dean of the Graduate School.", "Music Education: Built as Student Christian Association building. Acquired by the University, it housed Child Welfare and Music Education.", "Wulling Hall: Built as Medical Hall; named Millard Hall in 1906. Fire damaged the building. It later became the site for the pharmacy building. Named for Frederick J.", "Wulling, first dean and founder of the College of Pharmacy." ];
+
+var building_images = ["armory", "pillsbury", "folwell", "jones", "statue", "wesbrook", "nicholson", "eddy", "music", "wulling"];
+
+var info = "none";
+
+	var $ = function(id) {
+	return(document.getElementById(id));
+	}
+
+
+	function renderImage(action)
+	{
+          var image;
+	  var oldImage;
+	  var imageElement = $("building_images");
+	  var infoElement = $("building_info");
+	  
+          switch (action)
+	  {
+	     case 0:  
+	     image = building_images[0];
+	     currentImage = 0;
+	     imageElement.src = image.concat(".jpg");
+	      
+             if (info=="none")
+    	     infoElement.innerHTML = "";
+    	 else
+    	     infoElement.innerHTML = info[currentImage];
+	     changeSelected(currentImage);
+	     break;
+
+	     case 1:     
+	     	
+	     	if (currentImage+1 > numberOfImages-1)
+	     		{previousImage=currentImage;currentImage=-1;}
+			currentImage = currentImage + 1;
+	     	image = building_images[currentImage];
+    		imageElement.src = image.concat(".jpg");
+    		if (info=="none")
+    		infoElement.innerHTML = "";
+    	     else
+    		infoElement.innerHTML = info[currentImage];
+    		changeSelected(currentImage);
+    		break;
+
+	     case 2:   
+	        
+	        if (currentImage-1 < 0)
+	        	{currentImage = numberOfImages; previousImage = 0}
+	        currentImage = currentImage - 1;
+	        image = building_images[currentImage];
+	        imageElement.src = image.concat(".jpg");
+	        if (info=="none")
+    		infoElement.innerHTML = "";
+    	      else
+    		infoElement.innerHTML = info[currentImage];
+    		changeSelected(currentImage);
+	        break;
+	  }
+	}
+
+
+	function selectImage(action)
+	{
+          var image;
+          var oldImage;
+          var imageElement = $("building_images");
+          var infoElement = $("building_info");
+          currentImage = action;
+
+	  image = building_images[currentImage];
+          imageElement.src = image.concat(".jpg");
+          if (info=="none")
+          infoElement.innerHTML = "";
+          else
+          infoElement.innerHTML = info[currentImage];
+          
+          changeSelected(currentImage);
+	}
+
+
+	function changeSelected(action)
+	{
+          var id;
+          currentImage = action;
+	  for (i = 0; i < numberOfImages; i++) {
+	  id = "thumbnail";
+	  id = id.concat(i);
+	  if (i == currentImage)
+          $(id).className = "thumbnailSelected";
+          else {
+          $(id).className = "unselectedThumbnail";
+          	
+          }
+          
+	  }
+	}
+
+
+	function infoType()
+	{
+          var infolist=document.getElementById("infoList");
+          var selectedInfoType = infolist.options[infolist.selectedIndex].text;
+
+          if (selectedInfoType == "Architect")
+              info = infoArchitect;
+          else if (selectedInfoType == "Year")
+              info = infoYear;
+          else if (selectedInfoType = "Description")
+              info = infoDescription;
+          else
+              info = "none";
+	}
+
+
+	function slideShow()
+	{  	    
+          var oldImage = 0;
+       	  var imageElement = $("building_images"); 
+	  var infoElement = $("building_info");
+	  var image = building_images[currentImage];
+
+	  imageElement.src = image.concat(".jpg");
+	  imageElement.alt = "Image Number: " + image.value;
+
+	  if (info=="none")
+    	  infoElement.innerHTML = "";
+    	else
+    	   infoElement.innerHTML = info[currentImage];
+
+ 		changeSelected(currentImage);
+       if(currentImage == 0)
+		    previousImage = numberOfImages;
+	    else
+	       previousImage = currentImage - 1;
+	    
+
+	  oldImage = building_images[previousImage];	    
+	  currentImage = currentImage + 1;
+	    if (currentImage > numberOfImages-1){currentImage = 0;} 
+	    currentSlide = true;
+	    startSlideshow  = true;
+	} 
+
+	  
+	function startSlideShow(){
+	  if(!startSlideshow ){	
+	      myVariable = setInterval(function(){slideShow()}, delay);
+	    }
+		else
+            { 
+		alert("Slideshow is in progress");
+		}
+	}
+
+
+	function stopSlideShow(){
+	    startSlideshow  = false;
+	    clearTimeout(myVariable);
+	}
+</script>
+<style type = "text/css">
+
+button.thumbnailSelected
+{
+	border:1px;
+	border-color: red;
+	border-width: 5px;
+	border-style: solid;
+}
+button.unselectedThumbnail
+{
+	border:1px;
+	
+	border-color: white;
+	border-width: 5px;
+	border-style: solid;
+}
+div.content
+{
+	float: left;
+}
+div.morecontents
+{
+	float: right;
+}
+</style>
+</head>
+
+<body>
+	<div class = "startButtons">  
+		<button class = "startbuttons" type="button" onclick="renderImage(0)" id="reset">Start</button>
+		<button class = "startbuttons" type="button" onclick="renderImage(1)" id="next">Next</button>
+		<button class = "startbuttons" type="button" onclick="renderImage(2)" id="previous">Previous</button> 
+                <button class = "startbuttons" type="button" onclick="renderImage(3)" id="displayinformation">Display Information</button>   
+    </div>  
+    
+        <div class="infoSelection">
+   	<span>Select Information Type: </span>
+    	<select id="infoList" onchange="infoType()">
+    	<option>None</option>
+    	<option>Architect</option>
+    	<option>Year</option>
+    	<option>Description</option>
+     </select>
+   </div>
+
+
+   <div class = "imageThumbnails">
+        <button type="button" id="thumbnail0" class="unselectedThumbnail" onclick="selectImage(0)">
+           <img id="armory" height="50" width="50" src="armory.jpg" alt="armory"> </button>
+
+	<button type="button" id="thumbnail1" class="unselectedThumbnail" onclick="selectImage(1)">
+      	   <img id="pillsburry" height="50" width="50" src="pillsbury.jpg" alt="pillsbury"> </button>
+
+	<button type="button" id="thumbnail2" class="unselectedThumbnail" onclick="selectImage(2)">
+           <img id="folwell" height="50" width="50" src="folwell.jpg" alt="folwell"> </button>
+
+	<button type="button" id="thumbnail3" class="unselectedThumbnail" onclick="selectImage(3)">
+           <img id="jones" height="50" width="50" src="jones.jpg" alt="jones"> </button>
+
+	<button type="button" id="thumbnail4" class="unselectedThumbnail" onclick="selectImage(4)">
+           <img id="statue" height="50" width="50" src="statue.jpg" alt="statue"> </button>
+
+	<button type="button" id="thumbnail5" class="unselectedThumbnail" onclick="selectImage(5)">
+           <img id="wesbrook" height="50" width="50" src="wesbrook.jpg" alt="wesbrook"> </button>
+
+	<button type="button" id="thumbnail6" class="unselectedThumbnail" onclick="selectImage(6)">
+           <img id="nicholson" height="50" width="50" src="nicholson.jpg" alt="nicholson"> </button>
+
+	<button type="button" id="thumbnail7" class="unselectedThumbnail" onclick="selectImage(7)">
+           <img id="eddy" height="50" width="50" src="eddy.jpg" alt="eddy"> </button>
+
+	<button type="button" id="thumbnail8" class="unselectedThumbnail" onclick="selectImage(8)">
+           <img id="music" height="50" width="50" src="music.jpg" alt="music"> </button>
+
+	<button type="button" id="thumbnail9" class="unselectedThumbnail" onclick="selectImage(9)">
+           <img id="wulling" height="50" width="50" src="wulling.jpg" alt="wulling"> </button>
+   </div>
+
+	<div class = "slidesButton">
+		<button type="button"  onclick="startSlideShow()"  id="StartShow">Start Slideshow</button>
+		<button type="button" onclick= "stopSlideShow()" id="StopShow">Stop Slideshow</button>
+	</div>
+
+	<div class="content">
+		<img id="building_images" height="300" width="500" alt="largeImage"> 
+	</div> 
+	<div class=“morecontents”>
+		<h1>Image Information:</h1>
+		<span class="info" id="building_info" ></span>
+	</div>
+</body>
+</html>
